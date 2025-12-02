@@ -6,6 +6,163 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.style.opacity = '1';
     }, 100);
 
+    // ==================== 语言切换功能 ====================
+    let currentLang = localStorage.getItem('language') || 'en';
+    const langToggle = document.getElementById('langToggle');
+    
+    // 初始化语言
+    function initLanguage() {
+        if (currentLang === 'zh') {
+            switchToLanguage('zh', false);
+        }
+    }
+    
+    // 切换语言函数
+    function switchToLanguage(lang, animate = true) {
+        currentLang = lang;
+        localStorage.setItem('language', lang);
+        
+        // 添加切换动画类
+        if (animate) {
+            document.body.classList.add('lang-switching');
+        }
+        
+        // 获取所有需要翻译的元素
+        const elements = document.querySelectorAll('[data-en][data-zh]');
+        
+        elements.forEach((el, index) => {
+            if (animate) {
+                // 延迟动画，创建波浪效果
+                setTimeout(() => {
+                    el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(-10px)';
+                    
+                    setTimeout(() => {
+                        el.textContent = lang === 'en' ? el.dataset.en : el.dataset.zh;
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateY(0)';
+                    }, 150);
+                }, index * 10); // 每个元素延迟10ms
+            } else {
+                el.textContent = lang === 'en' ? el.dataset.en : el.dataset.zh;
+            }
+        });
+        
+        // 更新按钮文本
+        const langText = langToggle.querySelector('.lang-text');
+        if (animate) {
+            langText.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+            langText.style.opacity = '0';
+            langText.style.transform = 'scale(0.8)';
+            
+            setTimeout(() => {
+                langText.textContent = lang === 'en' ? 'EN' : '中文';
+                langText.style.opacity = '1';
+                langText.style.transform = 'scale(1)';
+            }, 200);
+        } else {
+            langText.textContent = lang === 'en' ? 'EN' : '中文';
+        }
+        
+        // 移除动画类
+        if (animate) {
+            setTimeout(() => {
+                document.body.classList.remove('lang-switching');
+            }, elements.length * 10 + 500);
+        }
+        
+        // 更新HTML lang属性
+        document.documentElement.lang = lang === 'en' ? 'en-US' : 'zh-CN';
+        
+        // 更新页面标题
+        const titleEl = document.querySelector('title');
+        if (titleEl && titleEl.dataset.en && titleEl.dataset.zh) {
+            titleEl.textContent = lang === 'en' ? titleEl.dataset.en : titleEl.dataset.zh;
+        }
+        
+        // 更新PDF按钮
+        if (typeof window.updatePdfButtonText === 'function') {
+            setTimeout(() => window.updatePdfButtonText(), 200);
+        }
+    }
+    
+    // 显示语言切换提示
+    function showLangToast(lang) {
+        const toast = document.createElement('div');
+        toast.textContent = lang === 'zh' ? '🇨🇳 已切换至中文' : '🇺🇸 Switched to English';
+        toast.style.cssText = `
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95), rgba(118, 75, 162, 0.95));
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            z-index: 10000;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        `;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateX(0)';
+        }, 10);
+        
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(100px)';
+            setTimeout(() => toast.remove(), 300);
+        }, 2000);
+    }
+    
+    // 语言切换按钮点击事件
+    langToggle.addEventListener('click', function() {
+        const newLang = currentLang === 'en' ? 'zh' : 'en';
+        switchToLanguage(newLang, true);
+        showLangToast(newLang);
+        
+        // 按钮动画
+        this.style.transform = 'scale(0.95) rotate(180deg)';
+        setTimeout(() => {
+            this.style.transform = '';
+        }, 300);
+    });
+    
+    // 键盘快捷键 Ctrl+L 或 Cmd+L 切换语言
+    document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
+            e.preventDefault();
+            const newLang = currentLang === 'en' ? 'zh' : 'en';
+            switchToLanguage(newLang, true);
+            showLangToast(newLang);
+            
+            // 按钮闪烁提示
+            langToggle.style.transform = 'scale(1.1)';
+            langToggle.style.boxShadow = '0 0 20px rgba(102, 126, 234, 0.6)';
+            setTimeout(() => {
+                langToggle.style.transform = '';
+                langToggle.style.boxShadow = '';
+            }, 300);
+        }
+    });
+    
+    // 初始化
+    initLanguage();
+    
+    // 更新PDF按钮文本的函数
+    window.updatePdfButtonText = function() {
+        const pdfText = printButton.querySelector('.pdf-text');
+        if (pdfText) {
+            pdfText.textContent = currentLang === 'en' ? 'Save as PDF' : '保存为PDF';
+        }
+    };
+
     // 添加技能标签交互效果
     const skillTags = document.querySelectorAll('.skill-tag');
     skillTags.forEach((tag, index) => {
@@ -125,7 +282,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 打印成 PDF 功能 - 增强版
     const printButton = document.createElement('button');
-    printButton.innerHTML = '<i class="fas fa-file-pdf"></i> Save as PDF';
+    printButton.setAttribute('data-en', 'Save as PDF');
+    printButton.setAttribute('data-zh', '保存为PDF');
+    printButton.innerHTML = '<i class="fas fa-file-pdf"></i> <span class="pdf-text">Save as PDF</span>';
     printButton.style.cssText = `
         position: fixed;
         bottom: 20px;

@@ -3,13 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LYLL's Blog</title>
+    <title data-en="LYLL's Resume" data-zh="LYLL的简历">LYLL's Resume</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/blog.css"> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script src="blog.js" defer></script>
 </head>
 <body>
+    <!-- 语言切换按钮 -->
+    <button id="langToggle" class="lang-toggle" aria-label="Switch Language">
+        <span class="lang-icon">🌐</span>
+        <span class="lang-text">中文</span>
+    </button>
+
     <!-- HTML部分 -->
     <header>
         <div class="container header-content">
@@ -17,7 +23,7 @@
                 <img src="css/头像.jpeg" alt="Li Yuanlong" class="avatar">
             </div>
             <h1>LYLL</h1>
-            <p class="title">BJTU | Frontend Developer / AI Developer</p>
+            <p class="title" data-en="BJTU | Frontend Developer / AI Developer" data-zh="北京交通大学 | 前端开发 / AI开发">BJTU | Frontend Developer / AI Developer</p>
             
             <div class="contact-info">
                 <div class="contact-item">
@@ -40,25 +46,25 @@
         
         <!-- 求职意向 -->
         <section id="job-intention">
-            <h2 class="section-title">Job Objective</h2>
+            <h2 class="section-title" data-en="Job Objective" data-zh="求职意向">Job Objective</h2>
             <div class="card">
-                <p><strong>Target Roles:</strong> Frontend Development / AI Development (Internship)</p>
-                <p><strong>Expected Compensation:</strong> ¥300-400/day or ¥6k-8k/month</p>
-                <p><strong>Preferred Location:</strong> Beijing, China</p>
+                <p><strong data-en="Target Roles:" data-zh="目标岗位：">Target Roles:</strong> <span data-en="Frontend Development / AI Development (Internship)" data-zh="前端开发 / AI开发（实习）">Frontend Development / AI Development (Internship)</span></p>
+                <p><strong data-en="Expected Compensation:" data-zh="期望薪资：">Expected Compensation:</strong><span data-en="¥300-400/day or ¥6k-8k/month" data-zh="300-400元/天 or 6k-8k/月"></span> </p>
+                <p><strong data-en="Preferred Location:" data-zh="期望城市：">Preferred Location:</strong> <span data-en="Beijing, China" data-zh="北京">Beijing, China</span></p>
             </div>
         </section>
         
         <!-- 教育经历 -->
         <section id="education">
-            <h2 class="section-title">Education</h2>
+            <h2 class="section-title" data-en="Education" data-zh="教育经历">Education</h2>
             <div class="card">
                 <div class="timeline">
                     <div class="timeline-item">
                         <div class="timeline-date">2022.09 - 2026.07</div>
-                        <h3>Beijing Jiaotong University (211 Project)</h3>
-                        <p><strong>School of Electronic Information | Information Engineering (Class A) | B.Sc.</strong></p>
-                        <p><strong>Major Courses:</strong> Computer Networks, Data Structures, Computer Organization, Communication Principles, Natural Language Processing</p>
-                        <p><strong>Class Rank:</strong> 17/60 (Top 28%) | <strong>GPA:</strong> 3.3/4.0</p>
+                        <h3 data-en="Beijing Jiaotong University (211 Project)" data-zh="北京交通大学（211工程）">Beijing Jiaotong University (211 Project)</h3>
+                        <p><strong data-en="School of Electronic Information | Information Engineering (Class A) | B.Sc." data-zh="电子信息工程学院 | 信息工程(A类) | 工学学士">School of Electronic Information | Information Engineering (Class A) | B.Sc.</strong></p>
+                        <p><strong data-en="Major Courses:" data-zh="主修课程：">Major Courses:</strong> <span data-en="Computer Networks, Data Structures, Computer Organization, Communication Principles, Natural Language Processing" data-zh="计算机网络、数据结构、计算机组成原理、通信原理、自然语言处理">Computer Networks, Data Structures, Computer Organization, Communication Principles, Natural Language Processing</span></p>
+                        <p><strong data-en="Class Rank:" data-zh="专业排名：">Class Rank:</strong> 17/60 (Top 28%) | <strong>GPA:</strong> 3.3/4.0</p>
                     </div>
                 </div>
             </div>
@@ -66,29 +72,29 @@
         
         <!-- 荣誉奖项 -->
         <section id="honors">
-            <h2 class="section-title">Honors & Awards</h2>
+            <h2 class="section-title" data-en="Honors & Awards" data-zh="荣誉奖项">Honors & Awards</h2>
             <div class="card">
                 <ul>
-                    <li>National-level University Innovation Project (Beijing Jiaotong University, 2024-2025)</li>
-                    <li>Third Prize, University-level "Challenge Cup" (Beijing Jiaotong University, 2024-2025)</li>
+                    <li data-en="National-level University Innovation Project (Beijing Jiaotong University, 2024-2025)" data-zh="国家级大学生创新创业训练计划项目（北京交通大学，2024-2025）">National-level University Innovation Project (Beijing Jiaotong University, 2024-2025)</li>
+                    <li data-en='Third Prize, University-level "Challenge Cup" (Beijing Jiaotong University, 2024-2025)' data-zh="校级挑战杯三等奖（北京交通大学，2024-2025）">Third Prize, University-level "Challenge Cup" (Beijing Jiaotong University, 2024-2025)</li>
                 </ul>
             </div>
         </section>
         
         <!-- 科研经历 -->
         <section id="research">
-            <h2 class="section-title">Research Experience</h2>
+            <h2 class="section-title" data-en="Research Experience" data-zh="科研经历">Research Experience</h2>
             <div class="card">
                 <div class="timeline">
                     <div class="timeline-item">
                         <div class="timeline-date">2024.05 - 2025.05</div>
-                        <h3>Digital Music Post-processing Software (National Innovation Project)</h3>
-                        <p><strong>Role:</strong> Project Lead</p>
-                        <p><strong>Project Summary:</strong></p>
+                        <h3 data-en="Digital Music Post-processing Software (National Innovation Project)" data-zh="数字音乐后期处理软件（国家级创新项目）">Digital Music Post-processing Software (National Innovation Project)</h3>
+                        <p><strong data-en="Role:" data-zh="角色：">Role:</strong> <span data-en="Project Lead" data-zh="项目负责人">Project Lead</span></p>
+                        <p><strong data-en="Project Summary:" data-zh="项目概述：">Project Summary:</strong></p>
                         <ul>
-                            <li>Developed a Python-based digital music post-processing tool integrating playback, tempo/pitch change, audio effects, and vocal separation.</li>
-                            <li>Implemented vocal separation using machine learning; trained a roformer model in PyTorch achieving SNR of 12.97 dB.</li>
-                            <li>Responsible for overall project coordination, report writing, and core model training and weight configuration.</li>
+                            <li data-en="Developed a Python-based digital music post-processing tool integrating playback, tempo/pitch change, audio effects, and vocal separation." data-zh="开发了基于Python的数字音乐后期处理工具，集成播放、变速变调、音效处理和人声分离功能。">Developed a Python-based digital music post-processing tool integrating playback, tempo/pitch change, audio effects, and vocal separation.</li>
+                            <li data-en="Implemented vocal separation using machine learning; trained a roformer model in PyTorch achieving SNR of 12.97 dB." data-zh="使用机器学习实现人声分离，在PyTorch中训练roformer模型，达到12.97 dB的信噪比。">Implemented vocal separation using machine learning; trained a roformer model in PyTorch achieving SNR of 12.97 dB.</li>
+                            <li data-en="Responsible for overall project coordination, report writing, and core model training and weight configuration." data-zh="负责项目整体协调、报告撰写以及核心模型训练和权重配置。">Responsible for overall project coordination, report writing, and core model training and weight configuration.</li>
                         </ul>
                     </div>
                 </div>
@@ -97,18 +103,18 @@
         
         <!-- 实习经历 -->
         <section id="internship">
-            <h2 class="section-title">Internship</h2>
+            <h2 class="section-title" data-en="Internship" data-zh="实习经历">Internship</h2>
             <div class="card">
                 <div class="timeline">
                     <div class="timeline-item">
                         <div class="timeline-date">2025.06 - 2025.12</div>
-                        <h3>China Academy of Railway Sciences Group Co., Ltd.</h3>
-                        <p><strong>Position:</strong> Software R&D Engineer</p>
-                        <p><strong>Responsibilities:</strong></p>
+                        <h3 data-en="China Academy of Railway Sciences Group Co., Ltd." data-zh="中国铁道科学研究院集团有限公司">China Academy of Railway Sciences Group Co., Ltd.</h3>
+                        <p><strong data-en="Position:" data-zh="职位：">Position:</strong> <span data-en="Software R&D Engineer" data-zh="软件研发工程师">Software R&D Engineer</span></p>
+                        <p><strong data-en="Responsibilities:" data-zh="工作职责：">Responsibilities:</strong></p>
                         <ul>
-                            <li>Contributed to the web frontend development of intelligent rail transport cockpit systems.</li>
-                            <li>Participated in R&D tasks involving complex data processing.</li>
-                            <li>Assisted the team in solving technical challenges and improving system performance and stability.</li>
+                            <li data-en="Contributed to the web frontend development of intelligent rail transport cockpit systems." data-zh="参与智能轨道交通驾驶舱系统的Web前端开发。">Contributed to the web frontend development of intelligent rail transport cockpit systems.</li>
+                            <li data-en="Participated in R&D tasks involving complex data processing." data-zh="参与涉及复杂数据处理的研发任务。">Participated in R&D tasks involving complex data processing.</li>
+                            <li data-en="Assisted the team in solving technical challenges and improving system performance and stability." data-zh="协助团队解决技术难题，提升系统性能和稳定性。">Assisted the team in solving technical challenges and improving system performance and stability.</li>
                         </ul>
                     </div>
                 </div>
@@ -117,35 +123,35 @@
         
         <!-- 技能证书 -->
         <section id="certificates">
-            <h2 class="section-title">Certificates</h2>
+            <h2 class="section-title" data-en="Certificates" data-zh="技能证书">Certificates</h2>
             <div class="card">
                 <div class="certificates">
                     <div class="certificate-item">
                         <i class="fas fa-certificate"></i>
                         <div>
-                            <h4>Software Designer</h4>
-                            <p>Intermediate Level (National Exam)</p>
+                            <h4 data-en="Software Designer" data-zh="软件设计师">Software Designer</h4>
+                            <p data-en="Intermediate Level (National Exam)" data-zh="中级（国家统考）">Intermediate Level (National Exam)</p>
                         </div>
                     </div>
                     <div class="certificate-item">
                         <i class="fas fa-language"></i>
                         <div>
-                            <h4>CET-6</h4>
-                            <p>Score: 483</p>
+                            <h4 data-en="CET-6" data-zh="大学英语六级">CET-6</h4>
+                            <p data-en="Score: 483" data-zh="成绩：483分">Score: 483</p>
                         </div>
                     </div>
                     <div class="certificate-item">
                         <i class="fas fa-id-card"></i>
                         <div>
-                            <h4>Driver's License</h4>
-                            <p>Class C1</p>
+                            <h4 data-en="Driver's License" data-zh="驾驶证">Driver's License</h4>
+                            <p data-en="Class C1" data-zh="C1">Class C1</p>
                         </div>
                     </div>
                     <div class="certificate-item">
                         <i class="fas fa-microphone"></i>
                         <div>
-                            <h4>Putonghua (Mandarin)</h4>
-                            <p>Level 2, Grade A</p>
+                            <h4 data-en="Putonghua (Mandarin)" data-zh="普通话">Putonghua (Mandarin)</h4>
+                            <p data-en="Level 2, Grade A" data-zh="二级甲等">Level 2, Grade A</p>
                         </div>
                     </div>
                 </div>
@@ -154,9 +160,9 @@
         
         <!-- 职业技能 -->
         <section id="skills">
-            <h2 class="section-title">Professional Skills</h2>
+            <h2 class="section-title" data-en="Professional Skills" data-zh="专业技能">Professional Skills</h2>
             <div class="card">
-                <h3>Languages & Frameworks</h3>
+                <h3 data-en="Languages & Frameworks" data-zh="编程语言与框架">Languages & Frameworks</h3>
                 <div class="skills-container">
                     <span class="skill-tag">JavaScript</span>
                     <span class="skill-tag">TypeScript</span>
@@ -170,7 +176,7 @@
                     <span class="skill-tag">Vite</span>
                 </div>
 
-                <h3 style="margin-top: 20px;">Tools & Platforms</h3>
+                <h3 style="margin-top: 20px;" data-en="Tools & Platforms" data-zh="工具与平台">Tools & Platforms</h3>
                 <div class="skills-container">
                     <span class="skill-tag">VS Code</span>
                     <span class="skill-tag">Git</span>
@@ -185,9 +191,9 @@
     
     <footer>
             <div class="container">
-            <p>© 2025 LYLL's Resume</p>
-            <p>Last updated: December 2025</p>
-            <p>Contact: +86 13620023051 | 1776081236@qq.com</p>
+            <p data-en="© 2025 LYLL's Resume" data-zh="© 2025 LYLL 的简历">© 2025 LYLL's Resume</p>
+            <p data-en="Last updated: December 2025" data-zh="最后更新：2025年12月">Last updated: December 2025</p>
+            <p data-en="Contact: +86 13620023051 | 1776081236@qq.com" data-zh="联系方式：+86 13620023051 | 1776081236@qq.com">Contact: +86 13620023051 | 1776081236@qq.com</p>
         </div>
     </footer>
 
