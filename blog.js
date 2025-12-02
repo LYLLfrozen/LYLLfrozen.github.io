@@ -80,10 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
             titleEl.textContent = lang === 'en' ? titleEl.dataset.en : titleEl.dataset.zh;
         }
         
-        // 更新PDF按钮
-        if (typeof window.updatePdfButtonText === 'function') {
-            setTimeout(() => window.updatePdfButtonText(), 200);
-        }
+        // （已移除）PDF 按钮更新逻辑
     }
     
     // 显示语言切换提示
@@ -153,14 +150,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 初始化
     initLanguage();
-    
-    // 更新PDF按钮文本的函数
-    window.updatePdfButtonText = function() {
-        const pdfText = printButton.querySelector('.pdf-text');
-        if (pdfText) {
-            pdfText.textContent = currentLang === 'en' ? 'Save as PDF' : '保存为PDF';
-        }
-    };
 
     // 添加技能标签交互效果
     const skillTags = document.querySelectorAll('.skill-tag');
@@ -279,85 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.body.appendChild(backToTop);
     
-    // 打印成 PDF 功能 - 增强版
-    const printButton = document.createElement('button');
-    printButton.setAttribute('data-en', 'Save as PDF');
-    printButton.setAttribute('data-zh', '保存为PDF');
-    printButton.innerHTML = '<i class="fas fa-file-pdf"></i> <span class="pdf-text">Save as PDF</span>';
-    printButton.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        border: none;
-        padding: 14px 24px;
-        border-radius: 30px;
-        cursor: pointer;
-        box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
-        z-index: 100;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 1rem;
-        font-weight: 600;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-    `;
-    
-    printButton.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-5px) scale(1.05)';
-        this.style.boxShadow = '0 8px 24px rgba(102, 126, 234, 0.6)';
-        this.style.background = 'linear-gradient(135deg, #764ba2, #667eea)';
-    });
-    
-    printButton.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0) scale(1)';
-        this.style.boxShadow = '0 4px 16px rgba(102, 126, 234, 0.4)';
-        this.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
-    });
-    
-    printButton.addEventListener('click', function() {
-        // 导出整页（含 header/footer），并尽量处理分页与隐藏样式问题
-        const element = document.documentElement || document.body;
-
-        // 保存可能会被 print 样式隐藏的元素的原始 display 值，导出后恢复
-        const toggled = [];
-        ['header', 'footer'].forEach(sel => {
-            const el = document.querySelector(sel);
-            if (el) {
-                toggled.push({ el, display: el.style.display });
-                el.style.display = 'block';
-            }
-        });
-
-        const opt = {
-            margin:       8, // mm
-            filename:     `LYLL_简历_${new Date().toISOString().slice(0,10)}.pdf`,
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true, scrollY: -window.scrollY },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak:    { mode: ['css', 'legacy'] }
-        };
-
-        if (typeof html2pdf === 'function') {
-            // 先微调滚动到顶部，确保从页面顶部开始渲染
-            const prevScroll = window.scrollY || window.pageYOffset;
-            window.scrollTo(0, 0);
-
-            html2pdf().set(opt).from(element).save().finally(() => {
-                // 恢复滚动位置和原始 display
-                window.scrollTo(0, prevScroll);
-                toggled.forEach(item => item.el.style.display = item.display || '');
-            });
-        } else {
-            // 回退到浏览器打印对话框（用户可选择保存为 PDF）
-            window.print();
-            toggled.forEach(item => item.el.style.display = item.display || '');
-        }
-    });
-    
-    document.body.appendChild(printButton);
+    // 已移除PDF导出按钮和逻辑
     
     // 增强的滚动观察器 - 元素进入视口动画
     const observerOptions = {
