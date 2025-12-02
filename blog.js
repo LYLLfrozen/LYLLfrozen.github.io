@@ -120,6 +120,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const currentYear = new Date().getFullYear();
     const yearElement = document.querySelector('footer p:nth-child(2)');
     if (yearElement) {
-        yearElement.textContent = `最后更新：${currentYear}年12月`;
+        yearElement.textContent = `last edit: ${currentYear} December`;
     }
 });
