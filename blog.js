@@ -10,11 +10,10 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentLang = localStorage.getItem('language') || 'en';
     const langToggle = document.getElementById('langToggle');
     
-    // 初始化语言
+    // 初始化语言（始终根据 currentLang 初始化，默认 'en'）
     function initLanguage() {
-        if (currentLang === 'zh') {
-            switchToLanguage('zh', false);
-        }
+        // 直接使用当前语言初始化（不使用动画），避免按钮与内容闪烁
+        switchToLanguage(currentLang, false);
     }
     
     // 切换语言函数
