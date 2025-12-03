@@ -352,6 +352,14 @@ section {
     scroll-margin-top: 120px;
 }
 
+/* 调整移动端的 scroll-margin-top，header/布局不同需更小偏移 */
+@media (max-width: 900px) {
+    section { scroll-margin-top: 100px; }
+}
+@media (max-width: 480px) {
+    section { scroll-margin-top: 80px; }
+}
+
 section:nth-child(1) { animation-delay: 0.1s; }
 section:nth-child(2) { animation-delay: 0.2s; }
 section:nth-child(3) { animation-delay: 0.3s; }
