@@ -1098,9 +1098,10 @@ body.has-custom-cursor * {
 /* 响应式：移动端语言按钮 */
 @media (max-width: 768px) {
     .lang-toggle {
-        top: auto;
-        bottom: 160px;
+        /* 保持右上角显示：在移动端仍固定到顶部右侧，避免被底部控件覆盖 */
+        top: 20px;
         right: 15px;
+        bottom: auto;
         padding: 8px 16px;
         font-size: 0.85rem;
     }
@@ -1112,7 +1113,10 @@ body.has-custom-cursor * {
 
 @media (max-width: 480px) {
     .lang-toggle {
-        bottom: 150px;
+        /* 更小屏幕也保持右上角 */
+        top: 16px;
+        right: 12px;
+        bottom: auto;
         padding: 6px 14px;
         font-size: 0.8rem;
     }
