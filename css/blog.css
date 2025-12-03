@@ -81,6 +81,126 @@ body {
     }
 }
 
+/* 右侧目录（TOC）样式 */
+.toc {
+    position: fixed;
+    right: 20px;
+    top: 140px;
+    width: 200px;
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    padding: 8px;
+    z-index: 999;
+    transition: transform 0.32s cubic-bezier(0.2,0.8,0.2,1), opacity 0.32s ease;
+}
+
+.toc-toggle {
+    display: block;
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: left;
+    font-weight: 700;
+    color: var(--primary-color);
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.toc-controls { display:flex; gap:8px; align-items:center; justify-content:space-between; }
+
+.toc-hide {
+    border: none;
+    background: transparent;
+    color: var(--primary-color);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.toc-list {
+    list-style: none;
+    margin: 6px 0 0 0;
+    padding: 0 6px 8px 6px;
+    max-height: 420px;
+    overflow: auto;
+}
+
+.toc-list li {
+    margin: 6px 0;
+}
+
+.toc-list a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 0.95rem;
+    display: block;
+    padding: 6px 8px;
+    border-radius: 8px;
+    transition: background 0.18s ease, color 0.18s ease;
+}
+
+.toc-list a:hover {
+    background: rgba(102,126,234,0.08);
+    color: var(--highlight-color);
+}
+
+.toc-list a.active {
+    background: linear-gradient(90deg, var(--highlight-color), var(--success-color));
+    color: white;
+    transition: background 0.32s ease, color 0.32s ease;
+}
+
+/* 折叠状态（移动端更友好） */
+.toc.toc-collapsed .toc-list {
+    display: none;
+}
+
+/* 隐藏目录（滑出屏幕，显示小展开按钮） */
+.toc.toc-hidden {
+    transform: translateX(230px);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* 展开按钮（当目录隐藏时显示） */
+.toc-open-button {
+    position: fixed;
+    right: 8px;
+    top: 140px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--highlight-color), var(--success-color));
+    color: white;
+    border: none;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    cursor: pointer;
+    transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+/* 当目录未隐藏时，隐藏展开按钮（利用相邻选择器） */
+.toc:not(.toc-hidden) + .toc-open-button { display: none; }
+
+@media (max-width: 900px) {
+    .toc-open-button { top: auto; bottom: 120px; }
+}
+
+@media (max-width: 900px) {
+    .toc {
+        right: 12px;
+        top: auto;
+        bottom: 120px;
+        width: 160px;
+    }
+}
+
+/* 在小屏幕也保持右侧目录可见；如需在小屏隐藏，请恢复上面的 media rule */
+
 @keyframes shimmer {
     0% {
         background-position: -1000px 0;
@@ -228,6 +348,8 @@ section {
     opacity: 0;
     transform: translateY(30px);
     animation: fadeInUp 0.6s ease-out forwards;
+    /* 防止被固定头部遮挡，确保锚点定位准确 */
+    scroll-margin-top: 120px;
 }
 
 section:nth-child(1) { animation-delay: 0.1s; }

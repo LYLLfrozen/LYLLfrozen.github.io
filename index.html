@@ -196,6 +196,25 @@
         </section>
     </main>
     
+    <!-- 右侧锚点导航（目录） -->
+    <nav class="toc" aria-label="Table of contents">
+        <div class="toc-controls">
+            <button class="toc-toggle" aria-expanded="true" aria-controls="toc-list"><span data-en="contents" data-zh="目录">Contents</span></button>
+            <button class="toc-hide" aria-label="Hide table of contents"><span data-en="hide" data-zh="隐藏">Hide</span></button>
+        </div>
+        <ul id="toc-list" class="toc-list">
+            <li><a href="#job-intention" data-en="Job Objective" data-zh="求职意向">Job Objective</a></li>
+            <li><a href="#education" data-en="Education" data-zh="教育经历">Education</a></li>
+            <li><a href="#honors" data-en="Honors & Awards" data-zh="荣誉奖项">Honors & Awards</a></li>
+            <li><a href="#research" data-en="Research Experience" data-zh="科研经历">Research Experience</a></li>
+            <li><a href="#internship" data-en="Internship" data-zh="实习经历">Internship</a></li>
+            <li><a href="#certificates" data-en="Certificates" data-zh="技能证书">Certificates</a></li>
+            <li><a href="#skills" data-en="Professional Skills" data-zh="专业技能">Professional Skills</a></li>
+        </ul>
+    </nav>
+    <!-- 当目录被隐藏时显示的展开按钮 -->
+    <button class="toc-open-button" aria-label="Open table of contents">☰</button>
+
     <footer>
             <div class="container">
             <p data-en="© 2025 LYLL's Resume" data-zh="© 2025 LYLL 的简历">© 2025 LYLL's Resume</p>
@@ -205,6 +224,84 @@
     </footer>
 
     <!-- JavaScript部分 -->
+
+    <!-- TOC: 监听滚动并高亮当前节（轻量，放在页面内，兼容现有语言切换逻辑） -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            const toc = document.querySelector('.toc');
+            const tocLinks = document.querySelectorAll('.toc-list a');
+            const sections = Array.from(tocLinks).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+
+            if (sections.length) {
+                // Use rootMargin to mark a section active when it's near the viewport center.
+                let activeTimeout = null;
+                const observer = new IntersectionObserver((entries) => {
+                    // 使用微小去抖 (debounce) 防止频繁闪烁
+                    if (activeTimeout) clearTimeout(activeTimeout);
+                    activeTimeout = setTimeout(() => {
+                        entries.forEach(entry => {
+                            if (!entry.target.id) return;
+                            const id = '#' + entry.target.id;
+                            const link = document.querySelector('.toc-list a[href="' + id + '"]');
+                            if (entry.isIntersecting) {
+                                tocLinks.forEach(l => l.classList.remove('active'));
+                                if (link) link.classList.add('active');
+                            }
+                        });
+                    }, 120);
+                }, { rootMargin: '-40% 0px -40% 0px', threshold: 0 });
+
+                sections.forEach(s => observer.observe(s));
+
+                // 确保点击目录时精确滚动到目标（兼容 scroll-margin-top）
+                tocLinks.forEach(a => {
+                    a.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const target = document.querySelector(this.getAttribute('href'));
+                        if (target) {
+                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            // 手动设置 active，避免滚动延迟导致状态不及时
+                            tocLinks.forEach(l => l.classList.remove('active'));
+                            this.classList.add('active');
+                        }
+                    });
+                });
+            }
+
+            // 折叠/展开功能（移动端友好）
+            const toggle = document.querySelector('.toc-toggle');
+            if (toggle) {
+                toggle.addEventListener('click', function() {
+                    toc.classList.toggle('toc-collapsed');
+                    const expanded = this.getAttribute('aria-expanded') === 'true';
+                    this.setAttribute('aria-expanded', (!expanded).toString());
+                });
+            }
+
+            // 隐藏/展开目录功能
+            const hideBtn = document.querySelector('.toc-hide');
+            const openBtn = document.querySelector('.toc-open-button');
+            if (hideBtn && openBtn) {
+                hideBtn.addEventListener('click', () => {
+                    toc.classList.add('toc-hidden');
+                    // 隐藏折叠状态也清除折叠类
+                    toc.classList.remove('toc-collapsed');
+                    // 更新 aria
+                    const toggleBtn = document.querySelector('.toc-toggle');
+                    if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+                });
+
+                openBtn.addEventListener('click', () => {
+                    toc.classList.remove('toc-hidden');
+                });
+            }
+        } catch (e) {
+            // 安全降级：若有异常，不影响主逻辑
+            console.error('TOC init error', e);
+        }
+    });
+    </script>
 
 </body>
 </html>
