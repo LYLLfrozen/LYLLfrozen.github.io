@@ -1,318 +1,625 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-en="LYLL's Resume" data-zh="LYLL的简历">LYLL's Resume</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/blog.css"> 
-    <script src="blog.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>李元龙 // CYBER RESUME</title>
+<meta name="description" content="李元龙 — 通信工程 | AI 应用与智能系统">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#05060a;
+    --bg-2:#0a0e16;
+    --panel:#0c111b;
+    --cyan:#00f0ff;
+    --magenta:#ff2e88;
+    --purple:#b14dff;
+    --green:#39ff14;
+    --ink:#e8ecf4;
+    --muted:#79869c;
+    --line:rgba(0,240,255,.16);
+    --line-2:rgba(177,77,255,.18);
+    --mono:'Space Mono',ui-monospace,monospace;
+    --disp:'Orbitron','Rajdhani','PingFang SC','Microsoft YaHei',sans-serif;
+    --ui:'Rajdhani','PingFang SC','Microsoft YaHei',system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--ui);
+    font-weight:500;
+    line-height:1.6;
+    overflow-x:hidden;
+    letter-spacing:.2px;
+    cursor:crosshair;
+  }
+  ::selection{background:var(--magenta);color:#0a0e16}
+
+  /* ---------- Background layers ---------- */
+  .bg-grid{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(var(--line) 1px,transparent 1px),
+      linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:56px 56px;
+    -webkit-mask-image:radial-gradient(circle at 50% 30%,#000 0%,transparent 78%);
+            mask-image:radial-gradient(circle at 50% 30%,#000 0%,transparent 78%);
+    opacity:.7;
+    animation:gridDrift 24s linear infinite;
+  }
+  @keyframes gridDrift{from{background-position:0 0,0 0}to{background-position:0 56px,56px 0}}
+  .bg-glow{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(600px 420px at 82% 8%,rgba(177,77,255,.20),transparent 70%),
+      radial-gradient(700px 500px at 8% 82%,rgba(0,240,255,.14),transparent 70%);
+  }
+  .scanlines{
+    position:fixed;inset:0;z-index:60;pointer-events:none;mix-blend-mode:multiply;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px);
+    animation:flicker 6s steps(60) infinite;
+  }
+  @keyframes flicker{0%,97%,100%{opacity:.35}98%{opacity:.5}99%{opacity:.28}}
+  .noise{
+    position:fixed;inset:0;z-index:59;pointer-events:none;opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(circle at 50% 40%,transparent 55%,rgba(0,0,0,.55) 100%)}
+
+  /* ---------- Cursor ---------- */
+  .cursor{position:fixed;top:0;left:0;width:26px;height:26px;border:1px solid var(--cyan);
+    border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:120;
+    mix-blend-mode:screen;transition:width .18s,height .18s,border-color .18s,background .18s;
+    box-shadow:0 0 12px rgba(0,240,255,.6)}
+  .cursor.hot{width:44px;height:44px;border-color:var(--magenta);background:rgba(255,46,136,.10)}
+  @media (hover:none){.cursor{display:none}body{cursor:auto}}
+
+  /* ---------- Boot overlay ---------- */
+  .boot{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;
+    align-items:flex-end;padding:6vh 6vw;font-family:var(--mono);font-size:13px;color:var(--cyan);
+    transition:opacity .5s ease,visibility .5s}
+  .boot.done{opacity:0;visibility:hidden}
+  .boot .line{white-space:pre-wrap;text-shadow:0 0 8px rgba(0,240,255,.5)}
+  .boot .line .ok{color:var(--green)}
+  .boot .cursor-block{display:inline-block;width:.6em;height:1em;background:var(--cyan);
+    vertical-align:-2px;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+
+  /* ---------- Layout ---------- */
+  .wrap{position:relative;z-index:10;max-width:1180px;margin:0 auto;padding:0 5vw}
+
+  /* ---------- Nav ---------- */
+  nav{position:fixed;top:0;left:0;right:0;z-index:80;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 5vw;backdrop-filter:blur(6px);
+    background:linear-gradient(180deg,rgba(5,6,10,.85),rgba(5,6,10,.35));
+    border-bottom:1px solid var(--line)}
+  .brand{font-family:var(--disp);font-weight:900;font-size:18px;letter-spacing:3px;color:var(--ink);
+    text-decoration:none;position:relative}
+  .brand .dot{color:var(--magenta)}
+  .brand small{display:block;font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);font-weight:400;margin-top:2px}
+  .nav-links{display:flex;gap:26px;align-items:center}
+  .nav-links a{font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--muted);text-decoration:none;transition:color .2s,text-shadow .2s;position:relative}
+  .nav-links a::before{content:"//";color:var(--magenta);opacity:0;margin-right:5px;transition:opacity .2s}
+  .nav-links a:hover{color:var(--cyan);text-shadow:0 0 10px rgba(0,240,255,.6)}
+  .nav-links a:hover::before{opacity:1}
+  .status{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--muted);
+    display:flex;align-items:center;gap:7px}
+  .status .led{width:8px;height:8px;border-radius:50%;background:var(--green);
+    box-shadow:0 0 10px var(--green);animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{50%{opacity:.35}}
+  @media (max-width:760px){.nav-links{display:none}}
+
+  /* ---------- Section frame ---------- */
+  section{position:relative;padding:96px 0}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:44px;flex-wrap:wrap}
+  .sec-idx{font-family:var(--mono);font-size:13px;color:var(--magenta);letter-spacing:2px}
+  .sec-title{font-family:var(--disp);font-weight:700;font-size:clamp(24px,4vw,42px);
+    letter-spacing:4px;text-transform:uppercase;color:var(--ink)}
+  .sec-title .sl{color:var(--cyan);text-shadow:0 0 18px rgba(0,240,255,.5)}
+  .sec-rule{flex:1;height:1px;min-width:40px;background:linear-gradient(90deg,var(--cyan),transparent)}
+
+  /* ---------- Hero ---------- */
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+    padding-top:70px;gap:40px}
+  .hero-grid{display:grid;grid-template-columns:1.5fr .9fr;gap:40px;align-items:end}
+  .tagline{font-family:var(--mono);font-size:13px;letter-spacing:3px;color:var(--cyan);
+    text-transform:uppercase;margin-bottom:18px}
+  .tagline .caret{display:inline-block;width:9px;height:16px;background:var(--cyan);
+    vertical-align:-3px;margin-left:2px;animation:blink 1s steps(1) infinite;box-shadow:0 0 8px var(--cyan)}
+  .name{font-family:var(--disp);font-weight:900;line-height:.95;
+    font-size:clamp(44px,9.2vw,118px);letter-spacing:2px;color:var(--ink);position:relative}
+  .cn{display:block;font-family:var(--ui);font-weight:700;font-size:clamp(22px,3.6vw,38px);
+    letter-spacing:14px;color:var(--magenta);margin-top:14px;text-shadow:0 0 20px rgba(255,46,136,.5)}
+  .role{font-family:var(--ui);font-weight:600;font-size:clamp(17px,2.4vw,26px);color:var(--muted);
+    margin-top:22px;letter-spacing:1px}
+  .role b{color:var(--cyan);font-weight:700}
+  .hero-cta{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap}
+
+  .btn{font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;
+    text-decoration:none;padding:14px 22px;border:1px solid var(--cyan);color:var(--cyan);
+    position:relative;overflow:hidden;transition:color .25s,border-color .25s;background:transparent;
+    display:inline-flex;align-items:center;gap:9px;min-height:44px}
+  .btn::after{content:"";position:absolute;inset:0;background:var(--cyan);z-index:-1;
+    transform:translateX(-101%);transition:transform .3s cubic-bezier(.7,0,.2,1)}
+  .btn:hover{color:#05060a}
+  .btn:hover::after{transform:translateX(0)}
+  .btn.mag{border-color:var(--magenta);color:var(--magenta)}
+  .btn.mag::after{background:var(--magenta)}
+  .btn.mag:hover{color:#05060a}
+
+  /* data readout panel */
+  .readout{border:1px solid var(--line-2);background:linear-gradient(160deg,rgba(12,17,27,.9),rgba(5,6,10,.6));
+    padding:22px;font-family:var(--mono);font-size:12px;position:relative;
+    box-shadow:inset 0 0 30px rgba(177,77,255,.06)}
+  .readout::before{content:"";position:absolute;top:-1px;left:-1px;width:14px;height:14px;
+    border-top:2px solid var(--magenta);border-left:2px solid var(--magenta)}
+  .readout::after{content:"";position:absolute;bottom:-1px;right:-1px;width:14px;height:14px;
+    border-bottom:2px solid var(--cyan);border-right:2px solid var(--cyan)}
+  .readout h4{font-size:11px;letter-spacing:2px;color:var(--magenta);margin-bottom:16px;text-transform:uppercase}
+  .ro-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dashed rgba(121,134,156,.22)}
+  .ro-row:last-child{border-bottom:0}
+  .ro-row .k{color:var(--muted)}
+  .ro-row .v{color:var(--cyan);text-align:right}
+  .ro-row .v.g{color:var(--green)}
+  .ro-row .v.m{color:var(--magenta)}
+
+  /* ---------- About ---------- */
+  .about-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:start}
+  .about-lead{font-size:clamp(19px,2.3vw,24px);font-weight:600;line-height:1.55;color:var(--ink)}
+  .about-lead .hl{color:var(--cyan)}
+  .about-body{margin-top:22px;color:var(--muted);font-size:16px;font-weight:400;max-width:56ch}
+  .about-body p{margin-bottom:16px}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);
+    border:1px solid var(--line)}
+  .stat{background:var(--panel);padding:22px 18px}
+  .stat .num{font-family:var(--disp);font-weight:700;font-size:clamp(30px,4.5vw,46px);
+    color:var(--cyan);line-height:1;text-shadow:0 0 16px rgba(0,240,255,.4)}
+  .stat:nth-child(2) .num,.stat:nth-child(4) .num{color:var(--magenta);text-shadow:0 0 16px rgba(255,46,136,.4)}
+  .stat .num small{font-size:.4em;color:var(--muted);text-shadow:none;margin-left:4px}
+  .stat .lbl{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--muted);margin-top:10px}
+
+  /* ---------- Skills ---------- */
+  .skills{display:grid;grid-template-columns:repeat(2,1fr);gap:40px 56px}
+  .skill-group h3{font-family:var(--mono);font-size:12px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--magenta);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+  .skill-group h3::before{content:"";width:20px;height:1px;background:var(--magenta)}
+  .skill-group.full{grid-column:1/-1}
+  .skill-note{color:var(--muted);font-size:15px;font-weight:400;margin-bottom:18px;max-width:60ch}
+  .chips{display:flex;flex-wrap:wrap;gap:10px}
+  .chip{font-family:var(--mono);font-size:12px;letter-spacing:1px;color:var(--cyan);
+    border:1px solid var(--line);padding:9px 14px;min-height:36px;display:flex;align-items:center;
+    transition:all .2s;background:rgba(0,240,255,.03)}
+  .chip:hover{border-color:var(--magenta);color:var(--magenta);box-shadow:0 0 14px rgba(255,46,136,.3);
+    transform:translateY(-2px)}
+
+  /* ---------- Timeline ---------- */
+  .timeline{position:relative;padding-left:34px;max-width:820px}
+  .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:1px;
+    background:linear-gradient(180deg,var(--cyan),var(--magenta),transparent)}
+  .tl-item{position:relative;margin-bottom:44px}
+  .tl-item:last-child{margin-bottom:0}
+  .tl-item::before{content:"";position:absolute;left:-31px;top:5px;width:13px;height:13px;
+    background:var(--bg);border:2px solid var(--cyan);transform:rotate(45deg);
+    box-shadow:0 0 12px rgba(0,240,255,.6)}
+  .tl-item:nth-child(even)::before{border-color:var(--magenta);box-shadow:0 0 12px rgba(255,46,136,.6)}
+  .tl-meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+  .tl-role{font-family:var(--disp);font-weight:700;font-size:19px;letter-spacing:1px;color:var(--ink)}
+  .tl-co{font-family:var(--mono);font-size:12px;color:var(--cyan);letter-spacing:1px}
+  .tl-date{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:1px}
+  .tl-desc{color:var(--muted);font-size:15px;margin-top:8px;max-width:64ch}
+  .tl-list{list-style:none;margin-top:10px;max-width:64ch}
+  .tl-list li,.proj ul li{position:relative;padding-left:20px;color:var(--muted);font-size:15px;margin-bottom:8px}
+  .tl-list li::before,.proj ul li::before{content:"▸";position:absolute;left:0;color:var(--magenta)}
+  .tl-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .tl-tags span{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--muted);
+    border:1px solid var(--line);padding:4px 9px}
+
+  /* ---------- Projects ---------- */
+  .proj-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+  .proj{position:relative;border:1px solid var(--line);background:var(--panel);
+    padding:26px;overflow:hidden;transition:transform .25s,border-color .25s}
+  .proj.wide{grid-column:1/-1}
+  .proj::before{content:"";position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;
+    background:radial-gradient(400px 200px at 100% 0,rgba(0,240,255,.12),transparent 70%)}
+  .proj:hover{transform:translateY(-4px);border-color:var(--cyan)}
+  .proj:hover::before{opacity:1}
+  .proj .pnum{font-family:var(--mono);font-size:11px;color:var(--magenta);letter-spacing:2px}
+  .proj h3{font-family:var(--disp);font-weight:700;font-size:22px;letter-spacing:1px;color:var(--ink);
+    margin:12px 0 10px}
+  .proj p{color:var(--muted);font-size:15px;margin-bottom:18px}
+  .proj ul{list-style:none;margin-bottom:18px}
+  .proj .meta{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+    font-family:var(--mono);font-size:11px;letter-spacing:1px;border-top:1px solid var(--line);padding-top:16px}
+  .proj .meta .tech{color:var(--cyan)}
+  .proj .meta .tag{color:var(--muted)}
+  .sub-head{font-family:var(--mono);font-size:12px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--magenta);margin:48px 0 20px;display:flex;align-items:center;gap:10px}
+  .sub-head::before{content:"";width:20px;height:1px;background:var(--magenta)}
+  @media (max-width:760px){.proj-grid{grid-template-columns:1fr}}
+
+  /* ---------- Contact ---------- */
+  .contact{border:1px solid var(--line-2);background:linear-gradient(160deg,rgba(12,17,27,.85),rgba(5,6,10,.5));
+    padding:54px 5vw;position:relative;max-width:900px;margin:0 auto}
+  .contact::before{content:"";position:absolute;top:-1px;right:-1px;width:16px;height:16px;
+    border-top:2px solid var(--cyan);border-right:2px solid var(--cyan)}
+  .contact h2{font-family:var(--disp);font-weight:900;font-size:clamp(30px,6vw,58px);
+    letter-spacing:3px;color:var(--ink);margin-bottom:14px}
+  .contact h2 .u{color:var(--magenta)}
+  .contact p{color:var(--muted);max-width:52ch;margin-bottom:30px;font-size:17px}
+  .term{font-family:var(--mono);font-size:13px;background:rgba(0,0,0,.4);border:1px solid var(--line);
+    padding:18px 20px;margin-bottom:30px;line-height:2}
+  .term .p{color:var(--magenta)}
+  .term .c{color:var(--cyan)}
+  .term .g{color:var(--green)}
+  .contact-links{display:flex;flex-wrap:wrap;gap:14px}
+  .c-link{font-family:var(--mono);font-size:12px;letter-spacing:1px;text-decoration:none;
+    color:var(--ink);border:1px solid var(--line);padding:13px 18px;min-height:44px;display:flex;
+    align-items:center;gap:10px;transition:all .2s}
+  .c-link .i{color:var(--cyan)}
+  .c-link:hover{border-color:var(--cyan);box-shadow:0 0 16px rgba(0,240,255,.25);transform:translateY(-2px);color:var(--cyan)}
+  .c-link:hover .i{color:var(--magenta)}
+
+  footer{position:relative;z-index:10;border-top:1px solid var(--line);
+    padding:26px 5vw;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    font-family:var(--mono);font-size:11px;letter-spacing:1px;color:var(--muted)}
+  footer a{color:var(--cyan);text-decoration:none}
+
+  /* ---------- Reveal ---------- */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s cubic-bezier(.5,0,.1,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- Glitch ---------- */
+  .glitch{position:relative}
+  .glitch::before,.glitch::after{content:attr(data-text);position:absolute;left:0;top:0;width:100%;
+    overflow:hidden;clip-path:inset(0 0 0 0);opacity:.85}
+  .glitch::before{color:var(--magenta);transform:translate(-2px,0);animation:glitchA 3s infinite steps(2)}
+  .glitch::after{color:var(--cyan);transform:translate(2px,0);animation:glitchB 3s infinite steps(2)}
+  @keyframes glitchA{0%,92%{clip-path:inset(0 0 100% 0);transform:translate(-2px,0)}
+    93%{clip-path:inset(0 0 40% 0);transform:translate(-4px,1px)}
+    95%{clip-path:inset(50% 0 20% 0);transform:translate(3px,-1px)}
+    97%{clip-path:inset(20% 0 60% 0);transform:translate(-3px,0)}
+    100%{clip-path:inset(0 0 100% 0);transform:translate(0,0)}}
+  @keyframes glitchB{0%,90%{clip-path:inset(0 0 100% 0);transform:translate(2px,0)}
+    91%{clip-path:inset(60% 0 10% 0);transform:translate(4px,-1px)}
+    94%{clip-path:inset(10% 0 70% 0);transform:translate(-4px,1px)}
+    98%{clip-path:inset(40% 0 30% 0);transform:translate(2px,0)}
+    100%{clip-path:inset(0 0 100% 0);transform:translate(0,0)}}
+
+  @media (max-width:760px){
+    .hero-grid,.about-grid,.skills{grid-template-columns:1fr;gap:34px}
+    section{padding:70px 0}
+    .name{letter-spacing:1px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
 </head>
 <body>
-    <!-- 语言切换按钮 -->
-    <button id="langToggle" class="lang-toggle" aria-label="Switch Language">
-        <span class="lang-icon">🌐</span>
-        <span class="lang-text">EN</span>
-    </button>
+  <!-- background -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+  <div class="vignette"></div>
+  <div class="noise"></div>
+  <div class="scanlines"></div>
+  <div class="cursor" id="cursor"></div>
 
-    <!-- HTML部分 -->
-    <header>
-        <div class="container header-content">
-            <div class="avatar-container">
-                <img src="css/头像.jpeg" alt="Li Yuanlong" class="avatar">
-            </div>
-            <div></div>
-            <h1 data-en="LYLL" data-zh="LYLL">LYLL</h1>
-            <div></div>
-            <p class="title" data-en="BJTU | Frontend Developer / AI Developer" data-zh="北京交通大学 | 前端开发 / AI开发">BJTU | Frontend Developer / AI Developer</p>
-            
-            <div class="contact-info">
-                <div class="contact-item">
-                    <i class="fas fa-phone"></i>
-                    <a href="tel:+8613620023051" style="color:white;"><span data-en="+86 13620023051" data-zh="13620023051">+86 13620023051</span></a>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <a href="mailto:1776081236@qq.com" style="color:white;"><span data-en="1776081236@qq.com" data-zh="1776081236@qq.com">1776081236@qq.com</span></a>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <a href="https://cn.bing.com/maps?mepi=0%7E%7EEmbedded%7EAddress_Link&ty=18&q=北京交通大学&ss=ypid.YN4067x437018730570896895&ppois=39.95227813720703_116.34281921386719_北京交通大学_YN4067x437018730570896895%7E&cp=qnrv6ftpvq9s&v=2&sV=1&FORM=MPSRPL&lvl=16.0" target="_blank" style="color:white;"><span data-en="Beijing, China" data-zh="北京">Beijing, China</span></a>
-                </div>
-            </div>
+  <!-- boot -->
+  <div class="boot" id="boot">
+    <div class="line" id="bootLine"><span class="cursor-block"></span></div>
+  </div>
+
+  <!-- nav -->
+  <nav>
+    <a href="#top" class="brand">LI<span class="dot">_</span>YUANLONG<small>CYBER RESUME v2.0</small></a>
+    <div class="nav-links">
+      <a href="#about">档案</a>
+      <a href="#skills">技能</a>
+      <a href="#edu">教育</a>
+      <a href="#experience">实习</a>
+      <a href="#work">项目</a>
+      <a href="#contact">联系</a>
+    </div>
+    <div class="status"><span class="led"></span>ONLINE</div>
+  </nav>
+
+  <main class="wrap" id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="reveal in">
+          <div class="tagline">&gt; <span id="typeRole">ai_app_dev</span><span class="caret"></span></div>
+          <h1 class="name glitch" data-text="LI YUANLONG">LI YUANLONG</h1>
+          <div class="cn">李 元 龙</div>
+          <p class="role">通信工程 <b>×</b> AI 应用与智能系统 —— 用代码与模型构建<span style="color:var(--cyan)">智能</span>未来</p>
+          <div class="hero-cta">
+            <a href="#work" class="btn">▸ 查看项目 / View Work</a>
+            <a href="#contact" class="btn mag">▸ 建立连接 / Connect</a>
+          </div>
         </div>
-    </header>
-    
-    <main class="container">
-        
-        <!-- 求职意向 -->
-        <section id="job-intention">
-            <h2 class="section-title" data-en="Job Objective" data-zh="求职意向">Job Objective</h2>
-            <div class="card">
-                <p><strong data-en="Target Roles:" data-zh="目标岗位：">Target Roles:</strong> <span data-en="Frontend Development / AI Development (Internship)" data-zh="前端开发 / AI开发（实习）">Frontend Development / AI Development (Internship)</span></p>
-                <p><strong data-en="Expected Compensation:" data-zh="期望薪资：">Expected Compensation:</strong><span data-en="¥300-400/day or ¥6k-8k/month" data-zh="300-400元/天 or 6k-8k/月"></span> </p>
-                <p><strong data-en="Preferred Location:" data-zh="期望城市：">Preferred Location:</strong> <span data-en="Beijing, China" data-zh="北京">Beijing, China</span></p>
-            </div>
-        </section>
-        
-        <!-- 教育经历 -->
-        <section id="education">
-            <h2 class="section-title" data-en="Education" data-zh="教育经历">Education</h2>
-            <a href="https://baike.baidu.com/item/北京交通大学/141728?fr=aladdin" target="_blank" style="text-decoration: none; color: inherit;">
-                <div class="card">
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-date">2022.09 - 2026.07</div>
-                        <h3 data-en="Beijing Jiaotong University (211 Project)" data-zh="北京交通大学（211工程）">Beijing Jiaotong University (211 Project)</h3>
-                        <p><strong data-en="School of Electronic Information | Information Engineering (Class A) | B.Sc." data-zh="电子信息工程学院 | 信息工程(A类) | 工学学士">School of Electronic Information | Information Engineering (Class A) | B.Sc.</strong></p>
-                        <p><strong data-en="Major Courses:" data-zh="主修课程：">Major Courses:</strong> <span data-en="Computer Networks, Data Structures, Computer Organization, Communication Principles, Natural Language Processing" data-zh="计算机网络、数据结构、计算机组成原理、通信原理、自然语言处理">Computer Networks, Data Structures, Computer Organization, Communication Principles, Natural Language Processing</span></p>
-                        <p><strong data-en="Class Rank:" data-zh="专业排名：">Class Rank:</strong> 17/60 (Top 28%) | <strong>GPA:</strong> 3.3/4.0</p>
-                    </div>
-                </div>
-            </div>
-            </a>
-        </section>
-        
-        <!-- 荣誉奖项 -->
-        <section id="honors">
-            <h2 class="section-title" data-en="Honors & Awards" data-zh="荣誉奖项">Honors & Awards</h2>
-            <div class="card">
-                <ul>
-                    <li data-en="National-level University Innovation Project (Beijing Jiaotong University, 2024-2025)" data-zh="国家级大学生创新创业训练计划项目（北京交通大学，2024-2025）">National-level University Innovation Project (Beijing Jiaotong University, 2024-2025)</li><br>
-                    <li data-en='Third Prize, University-level "Challenge Cup" (Beijing Jiaotong University, 2024-2025)' data-zh="校级挑战杯三等奖（北京交通大学，2024-2025）">Third Prize, University-level "Challenge Cup" (Beijing Jiaotong University, 2024-2025)</li>
-                </ul>
-            </div>
-        </section>
-        
-        <!-- 科研经历 -->
-        <section id="research">
-            <h2 class="section-title" data-en="Research Experience" data-zh="科研经历">Research Experience</h2>
-            <a href="https://pan.baidu.com/s/1wLhZR9bqvjlNhneiwD-yPA?pwd=pd35" target="_blank" style="text-decoration: none; color: inherit;">
-            <div class="card">
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-date">2024.05 - 2025.05</div>
-                        <h3 data-en="Digital Music Post-processing Software (National Innovation Project)" data-zh="数字音乐后期处理软件（国家级大创项目）">Digital Music Post-processing Software (National Innovation Project)</h3>
-                        <p><strong data-en="Role:" data-zh="角色：">Role:</strong> <span data-en="Project Lead" data-zh="项目负责人">Project Lead</span></p>
-                        <p><strong data-en="Project Summary:" data-zh="项目概述：">Project Summary:</strong></p>
-                        <ul>
-                            <li data-en="Developed a Python-based digital music post-processing tool integrating playback, tempo/pitch change, audio effects, and vocal separation." data-zh="开发了基于Python的数字音乐后期处理工具，集成播放、变速变调、音效处理和人声分离功能。">Developed a Python-based digital music post-processing tool integrating playback, tempo/pitch change, audio effects, and vocal separation.</li>
-                            <li data-en="Implemented vocal separation using machine learning; trained a roformer model in PyTorch achieving SNR of 12.97 dB." data-zh="使用机器学习实现人声分离，在PyTorch中训练roformer模型，达到12.97 dB的信噪比。">Implemented vocal separation using machine learning; trained a roformer model in PyTorch achieving SNR of 12.97 dB.</li>
-                            <li data-en="Responsible for overall project coordination, report writing, and core model training and weight configuration." data-zh="负责项目整体协调、报告撰写以及核心模型训练和权重配置。">Responsible for overall project coordination, report writing, and core model training and weight configuration.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            </a>
-        </section>
-        
-        <!-- 实习经历 -->
-        <section id="internship">
-            <h2 class="section-title" data-en="Internship" data-zh="实习经历">Internship</h2>
-            <a href="https://baike.baidu.com/item/中国铁道科学研究院集团有限公司/22515250" target="_blank" style="text-decoration: none; color: inherit;">
-            <div class="card">
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-date">2025.06 - 2025.12</div>
-                        <h3 data-en="China Academy of Railway Sciences Group Co., Ltd." data-zh="中国铁道科学研究院集团有限公司">China Academy of Railway Sciences Group Co., Ltd.</h3>
-                        <p><strong data-en="Position:" data-zh="职位：">Position:</strong> <span data-en="Front-End Development Engineer" data-zh="前端开发工程师">Front-End Development Engineer</span></p>
-                        <p><strong data-en="Responsibilities:" data-zh="工作职责：">Responsibilities:</strong></p>
-                        <ul>
-                            <li data-en="Participated in the Web front-end development of an intelligent rail transportation cockpit system (digital intelligent visualization cockpit) using Vue.js and JavaScript." data-zh="参与智能轨道交通驾驶舱系统（数智可视化驾驶舱）的Web前端开发（vue+js）。">Participated in the Web front-end development of an intelligent rail transportation cockpit system (digital intelligent visualization cockpit) using Vue.js and JavaScript.</li><br>
-                            <li data-en="Led the Web front-end development of an internal rail transportation cockpit system (automated testing workflow) using React and TypeScript." data-zh="主导内部轨道交通驾驶舱系统（自动化测试工作流）的Web前端开发（react+ts）。">Led the Web front-end development of an internal rail transportation cockpit system (automated testing workflow) using React and TypeScript.</li><br>
-                            <li data-en="Assisted the team in solving technical challenges and improving system performance and stability." data-zh="协助团队解决技术难题，提升系统性能和稳定性。">Assisted the team in solving technical challenges and improving system performance and stability.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            </a>
-        </section>
-        
-        <!-- 技能证书 -->
-        <section id="certificates">
-            <h2 class="section-title" data-en="Certificates" data-zh="技能证书">Certificates</h2>
-            <div class="card">
-                <div class="certificates">
-                    <div class="certificate-item">
-                        <i class="fas fa-certificate"></i>
-                        <div>
-                            <h4 data-en="Software Designer" data-zh="软件设计师">Software Designer</h4>
-                            <p data-en="Intermediate Level (National Exam)" data-zh="中级（国家统考）">Intermediate Level (National Exam)</p>
-                        </div>
-                    </div>
-                    <div class="certificate-item">
-                        <i class="fas fa-language"></i>
-                        <div>
-                            <h4 data-en="CET-6" data-zh="大学英语六级">CET-6</h4>
-                            <p data-en="Score: 483" data-zh="成绩：483分">Score: 483</p>
-                        </div>
-                    </div>
-                    <div class="certificate-item">
-                        <i class="fas fa-id-card"></i>
-                        <div>
-                            <h4 data-en="Driver's License" data-zh="驾驶证">Driver's License</h4>
-                            <p data-en="Class C1" data-zh="C1">Class C1</p>
-                        </div>
-                    </div>
-                    <div class="certificate-item">
-                        <i class="fas fa-microphone"></i>
-                        <div>
-                            <h4 data-en="Putonghua (Mandarin)" data-zh="普通话">Putonghua (Mandarin)</h4>
-                            <p data-en="Level 2, Grade A" data-zh="二级甲等">Level 2, Grade A</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- 职业技能 -->
-        <section id="skills">
-            <h2 class="section-title" data-en="Professional Skills" data-zh="专业技能">Professional Skills</h2>
-            <div class="card">
-                <h3 data-en="Languages & Frameworks" data-zh="编程语言与框架">Languages & Frameworks</h3>
-                <div class="skills-container">
-                    <span class="skill-tag">JavaScript</span>
-                    <span class="skill-tag">TypeScript</span>
-                    <span class="skill-tag">Python</span>
-                    <span class="skill-tag">Vue</span>
-                    <span class="skill-tag">React</span>
-                    <span class="skill-tag">PyTorch</span>
-                    <span class="skill-tag">HTML</span>
-                    <span class="skill-tag">CSS</span>
-                    <span class="skill-tag">Vite</span>
-                    <span class="skill-tag">Node.js</span>
-                </div>
-
-                <h3 style="margin-top: 20px;" data-en="Tools & Platforms" data-zh="工具与平台">Tools & Platforms</h3>
-                <div class="skills-container">
-                    <span class="skill-tag">VS Code</span>
-                    <span class="skill-tag">Git</span>
-                    <span class="skill-tag">GitHub</span>
-                    <span class="skill-tag">Gitee</span>
-                    <span class="skill-tag">Linux</span>
-                    <span class="skill-tag">Apifox</span>
-                </div>
-            </div>
-        </section>
-    </main>
-    
-    <!-- 右侧锚点导航（目录） -->
-    <nav class="toc" aria-label="Table of contents">
-        <div class="toc-controls">
-            <button class="toc-toggle" aria-expanded="true" aria-controls="toc-list"><span data-en="contents" data-zh="目录">Contents</span></button>
-            <button class="toc-hide" aria-label="Hide table of contents"><span data-en="hide" data-zh="隐藏">Hide</span></button>
+        <div class="readout reveal in">
+          <h4>// System Readout</h4>
+          <div class="ro-row"><span class="k">SCHOOL</span><span class="v">北京交通大学</span></div>
+          <div class="ro-row"><span class="k">DEGREE</span><span class="v g">硕士 · 通信工程</span></div>
+          <div class="ro-row"><span class="k">FOCUS</span><span class="v m">AI / AGENT</span></div>
+          <div class="ro-row"><span class="k">STATUS</span><span class="v g">● 硕士在读</span></div>
+          <div class="ro-row"><span class="k">LOCAL TIME</span><span class="v" id="clock">--:--:--</span></div>
         </div>
-        <ul id="toc-list" class="toc-list">
-            <li><a href="#job-intention" data-en="Job Objective" data-zh="求职意向">Job Objective</a></li>
-            <li><a href="#education" data-en="Education" data-zh="教育经历">Education</a></li>
-            <li><a href="#honors" data-en="Honors & Awards" data-zh="荣誉奖项">Honors & Awards</a></li>
-            <li><a href="#research" data-en="Research Experience" data-zh="科研经历">Research Experience</a></li>
-            <li><a href="#internship" data-en="Internship" data-zh="实习经历">Internship</a></li>
-            <li><a href="#certificates" data-en="Certificates" data-zh="技能证书">Certificates</a></li>
-            <li><a href="#skills" data-en="Professional Skills" data-zh="专业技能">Professional Skills</a></li>
-        </ul>
-    </nav>
-    <!-- 当目录被隐藏时显示的展开按钮 -->
-    <button class="toc-open-button" aria-label="Open table of contents">☰</button>
+      </div>
+    </section>
 
-    <footer>
-            <div class="container">
-            <p data-en="© 2025 LYLL's Resume" data-zh="© 2025 LYLL 的简历">© 2025 LYLL's Resume</p>
-            <p data-en="Last updated: December 2025" data-zh="最后更新：2025年12月">Last updated: December 2025</p>
-            <p data-en="Contact: +86 13620023051 | 1776081236@qq.com" data-zh="联系方式：+86 13620023051 | 1776081236@qq.com">Contact: +86 13620023051 | 1776081236@qq.com</p>
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="sec-head reveal">
+        <span class="sec-idx">01</span>
+        <h2 class="sec-title"><span class="sl">PROFILE</span> // 档案</h2>
+        <span class="sec-rule"></span>
+      </div>
+      <div class="about-grid">
+        <div class="reveal">
+          <p class="about-lead">通信工程出身，专注 <span class="hl">AI 应用与智能系统</span> —— 从模型训练、部署调优到全栈落地，一条链路自己走通。</p>
+          <div class="about-body">
+            <p>本科就读于北京交通大学信息工程专业，2026 年起在同校攻读通信工程硕士。在铁科院的一年实习里，我参与了轨道交通信号系统的可视化驾驶舱、自动化测试工作流和内置 AI 功能的开发，也负责过网球视觉识别 AI 模型。</p>
+            <p>学习能力强，踏实负责，善于沟通协作，具备良好的团队意识。</p>
+          </div>
         </div>
-    </footer>
+        <div class="stat-grid reveal">
+          <div class="stat"><div class="num"><span data-count="17">0</span><small>/60</small></div><div class="lbl">专业排名</div></div>
+          <div class="stat"><div class="num"><span data-count="3.4">0</span><small>/4.0</small></div><div class="lbl">GPA</div></div>
+          <div class="stat"><div class="num"><span data-count="12">0</span><small>月</small></div><div class="lbl">铁科院实习</div></div>
+          <div class="stat"><div class="num"><span data-count="2">0</span><small>项</small></div><div class="lbl">竞赛奖项</div></div>
+        </div>
+      </div>
+    </section>
 
-    <!-- JavaScript部分 -->
+    <!-- SKILLS -->
+    <section id="skills">
+      <div class="sec-head reveal">
+        <span class="sec-idx">02</span>
+        <h2 class="sec-title"><span class="sl">SKILLS</span> // 专业技能</h2>
+        <span class="sec-rule"></span>
+      </div>
+      <div class="skills">
+        <div class="skill-group reveal">
+          <h3>编程与开发</h3>
+          <div class="chips">
+            <span class="chip">Python</span><span class="chip">VS Code</span>
+            <span class="chip">Codex</span><span class="chip">Hermes</span>
+          </div>
+        </div>
+        <div class="skill-group reveal">
+          <h3>AI 与部署</h3>
+          <p class="skill-note">熟悉 PyTorch、AI 模型训练及 AI / Agent 工具使用；可独立开展人工智能模型部署与调优。</p>
+          <div class="chips">
+            <span class="chip">PyTorch</span><span class="chip">模型训练</span>
+            <span class="chip">AI / Agent 工具</span><span class="chip">模型部署与调优</span>
+          </div>
+        </div>
+        <div class="skill-group reveal">
+          <h3>项目技术栈</h3>
+          <div class="chips">
+            <span class="chip">React</span><span class="chip">TypeScript</span>
+            <span class="chip">Vite</span><span class="chip">Java</span>
+            <span class="chip">Spring Boot</span><span class="chip">Maven</span>
+            <span class="chip">MyBatis-Plus</span><span class="chip">MySQL</span>
+            <span class="chip">Redis</span><span class="chip">LangChain4j</span>
+            <span class="chip">Lombok</span><span class="chip">RESTful API</span>
+          </div>
+        </div>
+        <div class="skill-group reveal">
+          <h3>资格证书</h3>
+          <div class="chips">
+            <span class="chip">英语六级（483）</span><span class="chip">C1 驾驶证</span>
+            <span class="chip">普通话二甲</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <!-- TOC: 监听滚动并高亮当前节（轻量，放在页面内，兼容现有语言切换逻辑） -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        try {
-            const toc = document.querySelector('.toc');
-            const tocLinks = document.querySelectorAll('.toc-list a');
-            const sections = Array.from(tocLinks).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    <!-- EDUCATION -->
+    <section id="edu">
+      <div class="sec-head reveal">
+        <span class="sec-idx">03</span>
+        <h2 class="sec-title"><span class="sl">EDU</span> // 教育经历</h2>
+        <span class="sec-rule"></span>
+      </div>
+      <div class="timeline">
+        <div class="tl-item reveal">
+          <div class="tl-meta"><span class="tl-role">硕士 · 通信工程</span><span class="tl-date">2026.09 — 2029.07</span></div>
+          <div class="tl-co">北京交通大学（211 工程）</div>
+          <p class="tl-desc">专业代码 085402，A 类。</p>
+          <div class="tl-tags"><span>085402</span><span>A 类</span><span>211 工程</span></div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-meta"><span class="tl-role">本科 · 信息工程</span><span class="tl-date">2022.09 — 2026.07</span></div>
+          <div class="tl-co">北京交通大学（211 工程）</div>
+          <p class="tl-desc">专业排名 17/60，GPA 3.4/4.0。</p>
+          <div class="tl-tags"><span>排名 17/60</span><span>GPA 3.4/4.0</span><span>A 类</span></div>
+        </div>
+      </div>
+    </section>
 
-            if (sections.length) {
-                // Use rootMargin to mark a section active when it's near the viewport center.
-                let activeTimeout = null;
-                const observer = new IntersectionObserver((entries) => {
-                    // 选出当前可见度最高的节，避免多个 entry 导致抖动
-                    const pick = () => {
-                        let best = null;
-                        entries.forEach(entry => {
-                            if (!entry.target.id) return;
-                            if (!best || entry.intersectionRatio > best.intersectionRatio) {
-                                best = entry;
-                            }
-                        });
-                        if (best && best.target && best.target.id) {
-                            const id = '#' + best.target.id;
-                            const link = document.querySelector('.toc-list a[href="' + id + '"]');
-                            tocLinks.forEach(l => l.classList.remove('active'));
-                            if (link) link.classList.add('active');
-                        }
-                    };
-                    if (activeTimeout) clearTimeout(activeTimeout);
-                    activeTimeout = setTimeout(pick, 120);
-                }, { rootMargin: '-35% 0px -45% 0px', threshold: [0, 0.01, 0.1, 0.25, 0.5] });
+    <!-- EXPERIENCE -->
+    <section id="experience">
+      <div class="sec-head reveal">
+        <span class="sec-idx">04</span>
+        <h2 class="sec-title"><span class="sl">LOG</span> // 实习经历</h2>
+        <span class="sec-rule"></span>
+      </div>
+      <div class="timeline">
+        <div class="tl-item reveal">
+          <div class="tl-meta"><span class="tl-role">测试研发工程师</span><span class="tl-date">2025.06 — 2026.06</span></div>
+          <div class="tl-co">中国铁道科学研究院集团有限公司（铁科院）</div>
+          <ul class="tl-list">
+            <li>参与内部轨道交通信号系统（数智可视化驾驶舱）开发，并参与内置 AI 工作流建设。</li>
+            <li>负责内部轨道交通信号系统自动化测试工作流开发，并参与内置聊天 AI 功能开发。</li>
+            <li>负责内部网球智能教学系统开发，承担网球视觉识别 AI 模型开发工作。</li>
+          </ul>
+          <div class="tl-tags"><span>AI 工作流</span><span>自动化测试</span><span>视觉识别</span><span>可视化驾驶舱</span></div>
+        </div>
+      </div>
+    </section>
 
-                sections.forEach(s => observer.observe(s));
+    <!-- WORK -->
+    <section id="work">
+      <div class="sec-head reveal">
+        <span class="sec-idx">05</span>
+        <h2 class="sec-title"><span class="sl">WORK</span> // 项目与荣誉</h2>
+        <span class="sec-rule"></span>
+      </div>
+      <div class="proj-grid">
+        <article class="proj wide reveal">
+          <div class="pnum">P·01</div>
+          <h3>GU 系统</h3>
+          <p style="margin-bottom:14px">Java 开源 AI 项目。</p>
+          <ul>
+            <li>搭建前后端分离架构：前端采用 React + TypeScript + Vite，后端采用 Java + Spring Boot + Maven。</li>
+            <li>集成 MyBatis-Plus、MySQL、Redis、LangChain4j 与 Lombok；使用 Redis 缓存登录令牌及 API Key，支撑 AI 对话能力。</li>
+            <li>实现商品列表、商品详情、购物车、下单、文章管理、好友聊天、用户管理及 AI 对话等功能；设计 RESTful API 并完成前后端联调。</li>
+          </ul>
+          <div class="meta"><span class="tech">React · TypeScript · Spring Boot · LangChain4j</span><span class="tag">OPEN SOURCE</span></div>
+        </article>
+      </div>
 
-                // 确保点击目录时精确滚动到目标（兼容 scroll-margin-top）
-                tocLinks.forEach(a => {
-                    a.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const target = document.querySelector(this.getAttribute('href'));
-                        if (target) {
-                            // 在移动端点击后自动关闭 TOC 面板（若处于移动折叠状态）
-                            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                            // 手动设置 active，避免滚动延迟导致状态不及时
-                            tocLinks.forEach(l => l.classList.remove('active'));
-                            this.classList.add('active');
-                            // 如果是移动端并且 TOC 以覆盖面板形式显示，点击后收起
-                            if (window.innerWidth <= 680) {
-                                const tocEl = document.querySelector('.toc');
-                                if (tocEl) tocEl.classList.add('toc-hidden');
-                            }
-                        }
-                    });
-                });
-            }
+      <div class="sub-head reveal">竞赛奖项 / Awards</div>
+      <div class="proj-grid">
+        <article class="proj reveal">
+          <div class="pnum">A·01</div>
+          <h3>大创 · 国家级</h3>
+          <p>北京交通大学 2024-2025 年度大学生创新创业训练计划，国家级项目。</p>
+          <div class="meta"><span class="tech">2024 — 2025</span><span class="tag">国家级</span></div>
+        </article>
+        <article class="proj reveal">
+          <div class="pnum">A·02</div>
+          <h3>挑战杯（大挑）· 校三等奖</h3>
+          <p>北京交通大学 2024-2025 年度“挑战杯”大学生课外学术科技作品竞赛，校三等奖。</p>
+          <div class="meta"><span class="tech">2024 — 2025</span><span class="tag">校三等奖</span></div>
+        </article>
+      </div>
+    </section>
 
-            // 折叠/展开功能（移动端友好）
-            const toggle = document.querySelector('.toc-toggle');
-            if (toggle) {
-                toggle.addEventListener('click', function() {
-                    toc.classList.toggle('toc-collapsed');
-                    const expanded = this.getAttribute('aria-expanded') === 'true';
-                    this.setAttribute('aria-expanded', (!expanded).toString());
-                });
-            }
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="contact reveal">
+        <h2>建立<span class="u">连接</span></h2>
+        <p>如果你有 AI 应用、智能系统相关的机会，或者只是想聊聊代码与模型 —— 我的信号频道永远敞开。</p>
+        <div class="term">
+          <div><span class="p">guest@neon:~$</span> <span class="c">connect --with yuanlong</span></div>
+          <div><span class="g">▸ signal established ...</span></div>
+          <div><span class="g">▸ handshaking ... OK</span></div>
+          <div><span class="g">▸ awaiting your message_</span></div>
+        </div>
+        <div class="contact-links">
+          <a class="c-link" href="mailto:1776081236@qq.com"><span class="i">@</span>1776081236@qq.com</a>
+          <a class="c-link" href="tel:13620023051"><span class="i">TEL</span>136 2002 3051</a>
+        </div>
+      </div>
+    </section>
+  </main>
 
-            // 隐藏/展开目录功能
-            const hideBtn = document.querySelector('.toc-hide');
-            const openBtn = document.querySelector('.toc-open-button');
-            if (hideBtn && openBtn) {
-                hideBtn.addEventListener('click', () => {
-                    toc.classList.add('toc-hidden');
-                    // 隐藏折叠状态也清除折叠类
-                    toc.classList.remove('toc-collapsed');
-                    // 更新 aria
-                    const toggleBtn = document.querySelector('.toc-toggle');
-                    if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
-                });
+  <footer>
+    <span>© <span id="year"></span> 李元龙 // 编译于霓虹城</span>
+    <span>BUILT WITH <a href="#">PURE HTML · CSS · JS</a></span>
+  </footer>
 
-                openBtn.addEventListener('click', () => {
-                    toc.classList.remove('toc-hidden');
-                });
-            }
-        } catch (e) {
-            // 安全降级：若有异常，不影响主逻辑
-            console.error('TOC init error', e);
-        }
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- Boot sequence ---- */
+  var bootLines = [
+    'BOOT: NEON OS v2.0.7 ............ [OK]',
+    'LOAD: resume.core ................ [OK]',
+    'MOUNT: /skills /work /log ........ [OK]',
+    'RENDER: neon.theme ............... [OK]',
+    'SYSTEM READY ▸ PRESS ANYWHERE'
+  ];
+  var boot = document.getElementById('boot');
+  var bootLine = document.getElementById('bootLine');
+  if(reduce || !boot){ if(boot) boot.classList.add('done'); }
+  else{
+    var li=0, ci=0, timer;
+    function step(){
+      if(li>=bootLines.length){
+        var txt=bootLines.join('\n');
+        bootLine.innerHTML=txt.replace(/OK/g,'<span class="ok">OK</span>');
+        timer=setTimeout(function(){ boot.classList.add('done'); },500);
+        return;
+      }
+      var line=bootLines[li];
+      if(ci<line.length){ bootLine.textContent=bootLines.slice(0,li).concat(line.slice(0,ci+1)).join('\n')+' '; ci++; }
+      else{ bootLine.textContent=bootLines.slice(0,li+1).join('\n')+' '; li++; ci=0; }
+      timer=setTimeout(step, reduce?20:14);
+    }
+    step();
+    var dismiss=function(){ clearTimeout(timer); boot.classList.add('done');
+      window.removeEventListener('keydown',dismiss); boot.removeEventListener('click',dismiss); };
+    window.addEventListener('keydown',dismiss); boot.addEventListener('click',dismiss);
+    setTimeout(dismiss, 4200);
+  }
+
+  /* ---- Live clock ---- */
+  var clock=document.getElementById('clock');
+  function tick(){ try{ clock.textContent=new Date().toLocaleTimeString('en-GB'); }catch(e){} }
+  tick(); setInterval(tick,1000);
+  document.getElementById('year').textContent=new Date().getFullYear();
+
+  /* ---- Typewriter role ---- */
+  var roles=['ai_app_dev','agent_builder','vision_model','fullstack_dev'];
+  var el=document.getElementById('typeRole'), ri=0, pos=0, del=false;
+  function type(){
+    if(reduce){ el.textContent=roles[ri%roles.length]; return; }
+    var word=roles[ri%roles.length];
+    el.textContent=word.slice(0,pos);
+    if(!del && pos<word.length){ pos++; setTimeout(type,80); }
+    else if(!del){ del=true; setTimeout(type,1400); }
+    else if(pos>0){ pos--; setTimeout(type,45); }
+    else { del=false; ri++; setTimeout(type,300); }
+  }
+  type();
+
+  /* ---- Cursor ---- */
+  var cur=document.getElementById('cursor'), cx=innerWidth/2, cy=innerHeight/2, tx=cx, ty=cy;
+  if(!reduce){
+    document.addEventListener('mousemove',function(e){ tx=e.clientX; ty=e.clientY; });
+    (function loop(){ cx+=(tx-cx)*0.2; cy+=(ty-cy)*0.2;
+      cur.style.transform='translate('+(cx-13)+'px,'+(cy-13)+'px)'; requestAnimationFrame(loop); })();
+    document.addEventListener('mouseover',function(e){
+      cur.classList.toggle('hot', !!(e.target.closest('a,button,.chip,.proj')));
     });
-    </script>
+  } else { cur.style.display='none'; }
 
+  /* ---- Reveal + counters ---- */
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(!en.isIntersecting) return;
+      var t=en.target; t.classList.add('in');
+      t.querySelectorAll('[data-count]').forEach(countUp);
+      io.unobserve(t);
+    });
+  },{threshold:0.18});
+  document.querySelectorAll('.reveal').forEach(function(n){ io.observe(n); });
+
+  function countUp(n){
+    var raw=n.dataset.count, target=parseFloat(raw), dec=(raw.split('.')[1]||'').length,
+        start=performance.now(), dur=1200;
+    if(reduce){ n.textContent=target.toFixed(dec); return; }
+    function f(now){ var p=Math.min(1,(now-start)/dur);
+      n.textContent=(target*(1-Math.pow(1-p,3))).toFixed(dec);
+      if(p<1) requestAnimationFrame(f); }
+    requestAnimationFrame(f);
+  }
+})();
+</script>
 </body>
 </html>
